@@ -14,11 +14,14 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
-  -- exposed-modules:
+  exposed-modules:
+      Control.Monad.SFML
+      Control.Monad.SFML.Types
   -- other-modules:
   -- other-extensions:
   build-depends:
       base >= 4.6 && < 5,
+      mtl >= 2.0.0.0,
       SFML >= 0.2.0.0
   hs-source-dirs:
       src
