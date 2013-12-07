@@ -1,0 +1,7 @@
+.hsenv
+dist
+.DS_Store
+hsenv.log
+**/**.o
+**/**.hi
+**/**flycheck*

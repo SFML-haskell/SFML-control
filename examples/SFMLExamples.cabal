@@ -1,0 +1,22 @@
+name:                SFMLExamples
+version:             0.1.0.0
+synopsis:            Examples for SFML-control
+license:             MIT
+license-file:        LICENSE
+author:              Alfredo Di Napoli
+maintainer:          alfredo.dinapoli@gmail.com
+category:            Graphics
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+
+executable sfml-control-hello
+    build-depends:
+        base >= 4.6 && < 5,
+        SFML >= 0.1.0.0,
+        SFML-control >= 0.1.0.0
+    main-is:
+        SFMLHello.hs
+    default-language:
+        Haskell2010
