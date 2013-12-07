@@ -24,20 +24,19 @@ lift adapteeName argsNum = do
   adapteeFn <- varE adapteeName
   let wrapper = mkApply adapteeFn (map VarE args)
   fnBody <- [| SFML $ liftIO $ $(return wrapper) |]
-  generateWrapper adapteeName argsNum fnBody
+  generateWrapper adapteeName args fnBody
 
 
 --------------------------------------------------------------------------------
-generateWrapper :: Name -> Int -> Exp -> Q [Dec]
-generateWrapper adapteeName argsNum fnBody = do
-  adapterName <- newName ("sfml" ++ (capitalize . nameBase $ adapteeName))
+generateWrapper :: Name -> [Name] -> Exp -> Q [Dec]
+generateWrapper adapteeName args fnBody = do
+  adapterName <- newName $ nameBase adapteeName
   adapteeFn <- varE adapteeName
-  let args = mkArgs argsNum
   let wrapper = mkApply adapteeFn (map VarE args)
   return [FunD adapterName [Clause (map VarP args) (NormalB fnBody) []]]
 
 
-
+--------------------------------------------------------------------------------
 liftWithDestroy :: Name -> Name -> Int -> Q [Dec]
 liftWithDestroy modifier adapteeName argsNum = do
   let args = mkArgs argsNum
@@ -47,13 +46,12 @@ liftWithDestroy modifier adapteeName argsNum = do
     res <- liftIO $ $(varE modifier) $ $(return wrapper)
     modify $ \s -> G.destroy res : s
     return res |]
-  generateWrapper adapteeName argsNum fnBody
+  generateWrapper adapteeName args fnBody
 
 
 --------------------------------------------------------------------------------
 mkArgs :: Int -> [Name]
 mkArgs n = map (mkName . (:[])) . take n $ ['a' .. 'z']
-
 
 
 --------------------------------------------------------------------------------

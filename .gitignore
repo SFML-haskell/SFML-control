@@ -4,3 +4,4 @@ dist
 hsenv.log
 **/**.o
 **/**.hi
+**/**flycheck*

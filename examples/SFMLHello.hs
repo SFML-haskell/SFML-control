@@ -1,29 +1,24 @@
 module Main where
 
 import Control.Monad.SFML
-import SFML.Graphics
-import SFML.Window
-
-example :: SFML ()
-example = undefined
+import qualified SFML.Graphics as G
+import qualified SFML.Window as W
 
 
 main :: IO ()
 main = runSFML $ do
-    let ctxSettings = Just $ ContextSettings 24 8 0 1 2
-    let videoMode = VideoMode 640 480 32
-    wnd <- sfmlCreateRenderWindow videoMode "Hello" [SFDefaultStyle] ctxSettings
-    spr <- sfmlCreateSprite
-    loop wnd spr
+    let ctxSettings = Just $ W.ContextSettings 24 8 0 1 2
+    let videoMode = W.VideoMode 640 480 32
+    wnd <- createRenderWindow videoMode "Hello" [W.SFDefaultStyle] ctxSettings
+    loop wnd
 
 
-loop :: RenderWindow -> Sprite -> SFML ()
-loop wnd spr = do
-    --sfmlDrawSprite wnd spr Nothing
-    sfmlClearRenderWindow wnd blue
-    sfmlDisplay wnd
-    evt <- sfmlWaitEvent wnd
+loop :: G.RenderWindow -> SFML ()
+loop wnd = do
+    clearRenderWindow wnd G.blue
+    display wnd
+    evt <- waitEvent wnd
     case evt of
         Nothing -> return ()
-        Just SFEvtClosed -> return ()
-        _ -> loop wnd spr
+        Just W.SFEvtClosed -> return ()
+        _ -> loop wnd

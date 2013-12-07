@@ -1,17 +1,18 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
+
 module Control.Monad.SFML
   ( module Control.Monad.SFML.Types
-  , sfmlCreateRenderWindow
-  , sfmlCreateSprite
+  , createRenderWindow
+  , createSprite
   , createRectangleShape
   , drawRectangleOfSize
-  , sfmlClearRenderWindow
-  , sfmlWaitEvent
-  , sfmlDrawRectangle
-  , sfmlDisplay
+  , clearRenderWindow
+  , waitEvent
+  , drawRectangle
+  , display
   ) where
+
 
 import SFML.System.Vector2
 import SFML.Graphics.Color
@@ -27,28 +28,6 @@ import Control.Monad.SFML.Types
 import Control.Monad.SFML.Types.TH
 
 
-
-
---------------------------------------------------------------------------------
-createRenderWindow :: VideoMode
-                   -> String
-                   -> [WindowStyle]
-                   -> Maybe ContextSettings
-                   -> SFML RenderWindow
-createRenderWindow vm t stl cs = SFML $ do
-    wnd <- liftIO $ G.createRenderWindow vm t stl cs
-    modify $ \s -> G.destroy wnd : s
-    return wnd
-
-
---------------------------------------------------------------------------------
-createRectangleShape :: SFML G.RectangleShape
-createRectangleShape = SFML $ do
-  shp <- io . G.err $ G.createRectangleShape
-  modify $ \s -> G.destroy shp : s
-  return shp
-
-
 --------------------------------------------------------------------------------
 drawRectangleOfSize :: Vec2f -> SFML G.RectangleShape
 drawRectangleOfSize size = SFML $ do
@@ -57,14 +36,6 @@ drawRectangleOfSize size = SFML $ do
   modify $ \s -> G.destroy shp : s
   return shp
 
-
-
-----------------------------------------------------------------------------------
---createSprite :: SFML Sprite
---createSprite = SFML $ do
--- spr <- io . G.err $ G.createSprite
--- modify $ \s -> G.destroy spr : s
--- return spr
 
 -- Exported functions
 $(lift 'G.drawRectangle 3)
