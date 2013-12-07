@@ -3,14 +3,12 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module Control.Monad.SFML
   ( module Control.Monad.SFML.Types
-  , createRenderWindow
-  , createSprite
+  , sfmlCreateRenderWindow
+  , sfmlCreateSprite
   , createRectangleShape
-  , drawRectangle
   , drawRectangleOfSize
-  , clearRenderWindow
-  , waitEvent
-  , display
+  , sfmlClearRenderWindow
+  , sfmlWaitEvent
   , sfmlDrawRectangle
   , sfmlDisplay
   ) where
@@ -22,7 +20,7 @@ import SFML.Window (SFEvent, SFWindow, VideoMode, WindowStyle, ContextSettings)
 import SFML.Graphics (Sprite, RenderWindow)
 import qualified SFML.Graphics as G
 import qualified SFML.Graphics.RenderWindow as RW
-import Control.Monad.State.Strict
+import Control.Monad.State.Strict hiding (lift)
 
 import Control.Monad.SFML.Types.Internal
 import Control.Monad.SFML.Types
@@ -44,24 +42,11 @@ createRenderWindow vm t stl cs = SFML $ do
 
 
 --------------------------------------------------------------------------------
-clearRenderWindow :: RenderWindow -> Color -> SFML ()
-clearRenderWindow wnd = SFML . io . G.clearRenderWindow wnd
-
-
---------------------------------------------------------------------------------
 createRectangleShape :: SFML G.RectangleShape
 createRectangleShape = SFML $ do
   shp <- io . G.err $ G.createRectangleShape
   modify $ \s -> G.destroy shp : s
   return shp
-
-
---------------------------------------------------------------------------------
-drawRectangle :: RenderWindow
-              -> G.RectangleShape
-              -> Maybe G.RenderStates
-              -> SFML ()
-drawRectangle wnd shp states = SFML $ io $ G.drawRectangle wnd shp states
 
 
 --------------------------------------------------------------------------------
@@ -72,23 +57,20 @@ drawRectangleOfSize size = SFML $ do
   modify $ \s -> G.destroy shp : s
   return shp
 
---------------------------------------------------------------------------------
-display :: SFDisplayable a => a -> SFML ()
-display = SFML . io . G.display
 
 
---------------------------------------------------------------------------------
-waitEvent :: SFWindow a => a -> SFML (Maybe SFEvent)
-waitEvent = SFML . io . G.waitEvent
-
-
---------------------------------------------------------------------------------
-createSprite :: SFML Sprite
-createSprite = SFML $ do
- spr <- io . G.err $ G.createSprite
- modify $ \s -> G.destroy spr : s
- return spr
+----------------------------------------------------------------------------------
+--createSprite :: SFML Sprite
+--createSprite = SFML $ do
+-- spr <- io . G.err $ G.createSprite
+-- modify $ \s -> G.destroy spr : s
+-- return spr
 
 -- Exported functions
-$(mkSimple 'G.drawRectangle 3)
-$(mkSimple 'G.display 1)
+$(lift 'G.drawRectangle 3)
+$(lift 'G.clearRenderWindow 2)
+$(lift 'G.display 1)
+$(lift 'G.waitEvent 1)
+$(liftWithDestroy 'G.err 'G.createSprite 0)
+$(liftWithDestroy 'G.err 'G.createRectangleShape 0)
+$(liftWithDestroy 'id 'G.createRenderWindow 4)
