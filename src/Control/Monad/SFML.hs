@@ -25,7 +25,8 @@ import Control.Monad.State.Strict hiding (lift)
 
 import Control.Monad.SFML.Types.Internal
 import Control.Monad.SFML.Types
-import Control.Monad.SFML.Types.TH
+import Control.Monad.SFML.Types.TH hiding (f)
+import qualified Control.Monad.SFML.Types.TH as TH
 
 
 --------------------------------------------------------------------------------
@@ -38,10 +39,10 @@ drawRectangleOfSize size = SFML $ do
 
 
 -- Exported functions
-$(lift 'G.drawRectangle 3)
-$(lift 'G.clearRenderWindow 2)
-$(lift 'G.display 1)
-$(lift 'G.waitEvent 1)
-$(liftWithDestroy 'G.err 'G.createSprite 0)
-$(liftWithDestroy 'G.err 'G.createRectangleShape 0)
-$(liftWithDestroy 'id 'G.createRenderWindow 4)
+$(lift 'G.drawRectangle)
+$(lift 'G.clearRenderWindow)
+$(lift 'G.display)
+$(lift 'G.waitEvent)
+$(liftWithDestroy 'G.err 'G.createSprite)
+$(liftWithDestroy 'G.err 'G.createRectangleShape)
+$(liftWithDestroy 'id 'G.createRenderWindow)
