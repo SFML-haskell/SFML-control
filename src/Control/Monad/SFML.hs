@@ -1,3 +1,6 @@
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
 module Control.Monad.SFML
   ( module Control.Monad.SFML.Types
   , createRenderWindow
@@ -8,6 +11,8 @@ module Control.Monad.SFML
   , clearRenderWindow
   , waitEvent
   , display
+  , sfmlDrawRectangle
+  , sfmlDisplay
   ) where
 
 import SFML.System.Vector2
@@ -16,10 +21,13 @@ import SFML.SFDisplayable (SFDisplayable)
 import SFML.Window (SFEvent, SFWindow, VideoMode, WindowStyle, ContextSettings)
 import SFML.Graphics (Sprite, RenderWindow)
 import qualified SFML.Graphics as G
+import qualified SFML.Graphics.RenderWindow as RW
+import Control.Monad.State.Strict
 
 import Control.Monad.SFML.Types.Internal
 import Control.Monad.SFML.Types
-import Control.Monad.State.Strict
+import Control.Monad.SFML.Types.TH
+
 
 
 
@@ -65,11 +73,6 @@ drawRectangleOfSize size = SFML $ do
   return shp
 
 --------------------------------------------------------------------------------
-io :: IO a -> StateT SFMLState IO a
-io = liftIO
-
-
---------------------------------------------------------------------------------
 display :: SFDisplayable a => a -> SFML ()
 display = SFML . io . G.display
 
@@ -85,3 +88,7 @@ createSprite = SFML $ do
  spr <- io . G.err $ G.createSprite
  modify $ \s -> G.destroy spr : s
  return spr
+
+-- Exported functions
+$(mkSimple 'G.drawRectangle 3)
+$(mkSimple 'G.display 1)

@@ -17,12 +17,15 @@ library
   exposed-modules:
       Control.Monad.SFML
       Control.Monad.SFML.Types
-  -- other-modules:
+      Control.Monad.SFML.Types.TH
+  other-modules:
+      Control.Monad.SFML.Types.Internal
   -- other-extensions:
   build-depends:
       base >= 4.6 && < 5,
       mtl >= 2.0.0.0,
-      SFML >= 0.2.0.0
+      SFML >= 0.2.0.0,
+      template-haskell -any
   hs-source-dirs:
       src
   default-language:

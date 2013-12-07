@@ -1,10 +1,16 @@
 module Control.Monad.SFML.Types
   ( SFML
+  , io
   , runSFML ) where
 
 import Control.Monad.State.Strict
 import Control.Applicative
 import Control.Monad.SFML.Types.Internal
+
+
+--------------------------------------------------------------------------------
+io :: IO a -> StateT SFMLState IO a
+io = liftIO
 
 
 --------------------------------------------------------------------------------
