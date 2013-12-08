@@ -2,6 +2,12 @@
 dist
 .DS_Store
 hsenv.log
+src/**/**.o
+src/**/**.hi
 **/**.o
 **/**.hi
+**/**/**.o
+**/**/**.hi
+**/**/**/**.o
+**/**/**/**.hi
 **/**flycheck*

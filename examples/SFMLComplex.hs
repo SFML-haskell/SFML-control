@@ -1,24 +1,3 @@
-SFML-control
-============
-
-This library expose a SFML monad which deliver a higher level of abstraction
-over the low level bindings.
-
-# What do you mean by higher level?
-It exposes a `SFML` monad you must use and eventually run to go back into `IO`.
-In doing that, the `SFML` monad runs all the destructors for you. This means you
-don't have to worry about explicit deallocation of the underlying C resources.
-
-# How the bindings are achieved?
-To scrap as much boilerplate as possible, TH has been used. In fact, thanks to
-the TH machinery, the whole [SFML](https://github.com/SFML-haskell/SFML) functions has been lifted appropriately here:
-
-[Conversions](https://github.com/SFML-haskell/SFML-control/blob/master/src/Control/Monad/SFML/Conversions.hs)
-
-# Example
-This is a 1:1 translation of [this](https://github.com/SFML-haskell/SFML/blob/master/demos/hello/main.hs) example:
-
-``` haskell
 module Main where
 
 import Control.Monad.SFML
@@ -60,11 +39,3 @@ loop wnd spr txt = do
         Nothing -> return ()
         Just W.SFEvtClosed -> return ()
         _ -> loop wnd spr txt
-```
-
-As you can see it's almost a 1:1 translation, you just need to run the monad
-and get rid of explicit `destroy` !
-
-# Why two libraries?
-We decided that the user shouldn't pay the extra burder of a `SFML` monad if all he
-wants is a low level SFML binding.

@@ -2,7 +2,9 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module Control.Monad.SFML.Types.TH
        ( lift
-       , liftWithDestroy ) where
+       , lift'
+       , liftWithDestroy
+       ) where
 
 import Language.Haskell.TH
 import Data.Char
@@ -15,12 +17,17 @@ import qualified SFML.Graphics as G
     original low-level Haskell functions into the SFML monad
 --}
 
-
 --------------------------------------------------------------------------------
 -- | Generates a new function, lifted inside the SFML monad.
-lift :: Name -> Int -> Q [Dec]
-lift adapteeName argsNum = do
-  let args = mkArgs argsNum
+lift :: Name -> Q [Dec]
+lift adapteeName = do
+  argsNum <- extractArgNum adapteeName
+  lift' adapteeName argsNum
+
+
+lift' :: Name -> Int -> Q [Dec]
+lift' adapteeName argNum = do
+  let args = mkArgs argNum
   adapteeFn <- varE adapteeName
   let wrapper = mkApply adapteeFn (map VarE args)
   fnBody <- [| SFML $ liftIO $ $(return wrapper) |]
@@ -37,8 +44,9 @@ generateWrapper adapteeName args fnBody = do
 
 
 --------------------------------------------------------------------------------
-liftWithDestroy :: Name -> Name -> Int -> Q [Dec]
-liftWithDestroy modifier adapteeName argsNum = do
+liftWithDestroy :: Name -> Name -> Q [Dec]
+liftWithDestroy modifier adapteeName = do
+  argsNum <- extractArgNum adapteeName
   let args = mkArgs argsNum
   adapteeFn <- varE adapteeName
   let wrapper = mkApply adapteeFn (map VarE args)
@@ -52,6 +60,21 @@ liftWithDestroy modifier adapteeName argsNum = do
 --------------------------------------------------------------------------------
 mkArgs :: Int -> [Name]
 mkArgs n = map (mkName . (:[])) . take n $ ['a' .. 'z']
+
+
+--------------------------------------------------------------------------------
+extractArgNum :: Name -> Q Int
+extractArgNum fname = do
+  info <- reify fname
+  case info of
+   (VarI _ (ForallT _ _ t) _ _) -> return . countArgs $ t
+   (VarI _ t _ _) -> return . countArgs $ t
+   (ClassOpI _ (ForallT _ _ t) _ _) -> return . countArgs $ t
+   e -> error $ show e ++ " is not a function."
+
+   where
+     countArgs (AppT (AppT ArrowT _) ts) = 1 + countArgs ts
+     countArgs _ = 0
 
 
 --------------------------------------------------------------------------------
