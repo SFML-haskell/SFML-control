@@ -4,6 +4,7 @@
 module Control.Monad.SFML
   ( module Control.Monad.SFML.Types
   , module Control.Monad.SFML.Conversions
+  , liftIO
   ) where
 
 

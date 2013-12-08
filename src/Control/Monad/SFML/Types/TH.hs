@@ -2,6 +2,7 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module Control.Monad.SFML.Types.TH
        ( lift
+       , lift'
        , liftWithDestroy
        ) where
 
@@ -21,7 +22,12 @@ import qualified SFML.Graphics as G
 lift :: Name -> Q [Dec]
 lift adapteeName = do
   argsNum <- extractArgNum adapteeName
-  let args = mkArgs argsNum
+  lift' adapteeName argsNum
+
+
+lift' :: Name -> Int -> Q [Dec]
+lift' adapteeName argNum = do
+  let args = mkArgs argNum
   adapteeFn <- varE adapteeName
   let wrapper = mkApply adapteeFn (map VarE args)
   fnBody <- [| SFML $ liftIO $ $(return wrapper) |]
