@@ -2,7 +2,8 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module Control.Monad.SFML.Types.TH
        ( lift
-       , liftWithDestroy ) where
+       , liftWithDestroy
+       ) where
 
 import Language.Haskell.TH
 import Data.Char

@@ -17,6 +17,7 @@ library
       Control.Monad.SFML.Types.TH
   other-modules:
       Control.Monad.SFML.Types.Internal
+      Control.Monad.SFML.Conversions
   -- other-extensions:
   build-depends:
       base >= 4.6 && < 5,
