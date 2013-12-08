@@ -7,6 +7,7 @@ author:              Alfredo Di Napoli
 maintainer:          alfredo.dinapoli@gmail.com
 category:            Graphics
 build-type:          Simple
+homepage:            https://github.com/SFML-haskell/SFML-control
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
