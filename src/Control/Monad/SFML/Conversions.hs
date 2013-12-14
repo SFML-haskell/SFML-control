@@ -12,11 +12,16 @@ import qualified SFML.Window as W
 import Data.Maybe
 
 -- | Run the given IO action and throw an error if it fails.
+-- This function is the dual of SFML's 'err'. The idea here
+-- is that we accept a certain level of pragmatism and assume
+-- the underlying C library is unlikely to fail for out-of-memory
+-- errors or data corruption. 'SFML' follows a more disciplined
+-- approach.
 mb :: IO (Maybe a) -> IO a
 mb = (maybe (error "Nothing found.") return =<<)
 
 
--- Audio / Listener.hs
+-- * Audio / Listener.hs
 $(lift 'A.setGlobalVolume)
 $(lift 'A.getGlobalVolume)
 $(lift 'A.setListenerPosition)
@@ -24,7 +29,7 @@ $(lift 'A.getListenerPosition)
 $(lift 'A.setListenerDirection)
 $(lift 'A.getListenerDirection)
 
--- Audio / Music.hs
+-- * Audio / Music.hs
 $(liftWithDestroy 'G.err 'A.musicFromFile)
 $(liftWithDestroy 'G.err 'A.musicFromMemory)
 $(liftWithDestroy 'G.err 'A.musicFromStream)
@@ -52,13 +57,13 @@ $(lift 'A.isRelativeToListener)
 $(lift 'A.getMinDistance)
 $(lift 'A.getAttenuation)
 
--- Audio / Sound.hs
+-- * Audio / Sound.hs
 $(liftWithDestroy 'id 'A.createSound)
 $(lift 'A.copySound)
 $(lift 'A.setSoundBuffer)
 $(lift 'A.getSoundBuffer)
 
--- Audio / SoundBuffer.hs
+-- * Audio / SoundBuffer.hs
 $(liftWithDestroy 'G.err 'A.soundBufferFromFile)
 $(liftWithDestroy 'G.err 'A.soundBufferFromMemory)
 $(liftWithDestroy 'G.err 'A.soundBufferFromStream)
@@ -68,19 +73,19 @@ $(lift 'A.saveSoundBufferToFile)
 $(lift 'A.getSamples)
 $(lift 'A.getSampleCount)
 
--- Audio / SoundBufferRecorder.hs
+-- * Audio / SoundBufferRecorder.hs
 $(liftWithDestroy 'G.err 'A.createSoundBufferRecorder)
 $(lift 'A.startRecording)
 $(lift 'A.stopRecording)
 
--- Audio / SoundRecorder.hs
+-- * Audio / SoundRecorder.hs
 $(liftWithDestroy 'G.err 'A.createSoundRecorder)
 $(lift 'A.isSoundRecorderAvailable)
 
--- Audio / SoundStream.hs
+-- * Audio / SoundStream.hs
 $(liftWithDestroy 'id 'A.createSoundStream)
 
--- Graphics / CircleShape.hs
+-- * Graphics / CircleShape.hs
 $(liftWithDestroy 'G.err 'G.createCircleShape)
 $(lift 'G.copy)
 $(lift 'G.setRotation)
@@ -112,11 +117,11 @@ $(lift 'G.setPointCount)
 $(lift 'G.getLocalBounds)
 $(lift 'G.getGlobalBounds)
 
--- Graphics / ConvexShape.hs
+-- * Graphics / ConvexShape.hs
 $(liftWithDestroy 'G.err 'G.createConvexShape)
 $(lift 'G.setPoint)
 
--- Graphics / Font.hs
+-- * Graphics / Font.hs
 $(liftWithDestroy 'G.err 'G.fontFromFile)
 $(liftWithDestroy 'G.err 'G.fontFromMemory)
 $(liftWithDestroy 'G.err 'G.fontFromStream)
@@ -125,7 +130,7 @@ $(lift 'G.getKerning)
 $(lift 'G.getLineSpacing)
 $(lift 'G.getFontTexture)
 
--- Graphics / Image.hs
+-- * Graphics / Image.hs
 $(liftWithDestroy 'G.err 'G.createImage)
 $(liftWithDestroy 'id 'G.imageFromColor)
 $(liftWithDestroy 'id 'G.imageFromPixels)
@@ -143,12 +148,12 @@ $(lift 'G.getPixels)
 $(lift 'G.flipHorizontally)
 $(lift 'G.flipVertically)
 
--- Graphics / RectangleShape.hs
+-- * Graphics / RectangleShape.hs
 $(liftWithDestroy 'G.err 'G.createRectangleShape)
 $(lift 'G.setSize)
 $(lift 'G.getSize)
 
--- Graphics / RenderTexture.hs
+-- * Graphics / RenderTexture.hs
 $(liftWithDestroy 'G.err 'G.createRenderTexture)
 $(lift 'G.getTextureSize)
 $(lift 'G.setActive)
@@ -174,7 +179,7 @@ $(lift 'G.getRenderTexture)
 $(lift 'G.setSmooth)
 $(lift 'G.isSmooth)
 
--- Graphics / RenderWindow.hs
+-- * Graphics / RenderWindow.hs
 $(liftWithDestroy 'id 'G.createRenderWindow)
 $(liftWithDestroy 'id 'G.renderWindowFromHandle)
 $(lift 'G.close)
@@ -202,7 +207,7 @@ $(lift 'G.captureRenderWindow)
 $(lift 'G.getMousePosition)
 $(lift 'G.setMousePosition)
 
--- Graphics / Shader.hs
+-- * Graphics / Shader.hs
 $(liftWithDestroy 'G.err 'G.shaderFromFile)
 $(liftWithDestroy 'G.err 'G.shaderFromMemory)
 $(liftWithDestroy 'G.err 'G.shaderFromStream)
@@ -219,16 +224,16 @@ $(lift 'G.setCurrentTextureParameter)
 $(lift 'G.bind)
 $(lift 'G.isShaderAvailable)
 
--- Graphics / Shape.hs
+-- * Graphics / Shape.hs
 $(liftWithDestroy 'id 'G.createShape)
 $(lift 'G.updateShape)
 
--- Graphics / Sprite.hs
+-- * Graphics / Sprite.hs
 $(liftWithDestroy 'G.err 'G.createSprite)
 $(lift 'G.setColor)
 $(lift 'G.getColor)
 
--- Graphics / Text.hs
+-- * Graphics / Text.hs
 $(liftWithDestroy 'G.err 'G.createText)
 $(lift 'G.setTextString)
 $(lift 'G.setTextStringU)
@@ -246,7 +251,7 @@ $(lift 'G.findTextCharacterPos)
 $(lift 'G.getTextLocalBounds)
 $(lift 'G.getTextGlobalBounds)
 
--- Graphics / Texture.hs
+-- * Graphics / Texture.hs
 $(liftWithDestroy 'G.err 'G.createTexture)
 $(liftWithDestroy 'G.err 'G.textureFromFile)
 $(liftWithDestroy 'G.err 'G.textureFromMemory)
@@ -261,7 +266,7 @@ $(lift 'G.updateTextureFromRenderWindow)
 $(lift 'G.setRepeated)
 $(lift 'G.isRepeated)
 
--- Graphics / VertexArray.hs
+-- * Graphics / VertexArray.hs
 $(liftWithDestroy 'id 'G.createVA)
 $(lift 'G.getVertexCount)
 $(lift 'G.getVertex)
@@ -272,7 +277,7 @@ $(lift 'G.setPrimitiveType)
 $(lift 'G.getPrimitiveType)
 $(lift 'G.getVABounds)
 
--- Graphics / View.hs
+-- * Graphics / View.hs
 $(liftWithDestroy 'id 'G.createView)
 $(lift 'G.viewFromRect)
 $(lift 'G.copyView)
@@ -289,20 +294,20 @@ $(lift 'G.moveView)
 $(lift 'G.rotateView)
 $(lift 'G.zoomView)
 
--- System / Clock.hs
+-- * System / Clock.hs
 $(liftWithDestroy 'id 'S.createClock)
 $(lift 'S.getElapsedTime)
 $(lift 'S.restartClock)
 
--- System / Sleep.hsc
+-- * System / Sleep.hsc
 $(lift 'S.sfSleep)
 
 
--- Window / Context.hsc
+-- * Window / Context.hsc
 $(liftWithDestroy 'id 'W.createContext)
 $(lift 'W.setActiveContext)
 
--- Window / Joystick.hs
+-- * Window / Joystick.hs
 $(lift 'W.isJoystickConnected)
 $(lift 'W.getButtonCount)
 $(lift 'W.hasAxis)
@@ -310,17 +315,17 @@ $(lift 'W.isJoystickButtonPressed)
 $(lift 'W.getAxisPosition)
 $(lift 'W.updateJoystick)
 
--- Window / Keyboard.hs
+-- * Window / Keyboard.hs
 $(lift 'W.isKeyPressed)
 
--- Window / Mouse.hs
+-- * Window / Mouse.hs
 $(lift 'W.isMouseButtonPressed)
 
--- Window / VideoMode.hs
+-- * Window / VideoMode.hs
 $(lift 'W.getDesktopMode)
 $(lift 'W.getFullscreenModes)
 $(lift 'W.isValid)
 
--- Window / Window.hsc
+-- * Window / Window.hsc
 $(liftWithDestroy 'id 'W.createWindow)
 $(liftWithDestroy 'id 'W.windowFromHandle)
