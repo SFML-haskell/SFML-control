@@ -55,9 +55,6 @@ managed objects. This allow us to program at an higher level of abstraction:
 
 module Control.Monad.SFML
   ( module Control.Monad.SFML.Types
-  -- * Conversions
-  -- $THConversion
-  , module Control.Monad.SFML.Conversions
   -- * Re-exports for your convenience
   , liftIO
   ) where
@@ -67,22 +64,6 @@ import SFML.System.Vector2
 import qualified SFML.Graphics as G
 
 import Control.Monad.State.Strict hiding (lift)
-
-
 import Control.Monad.SFML.Types.Internal
 import Control.Monad.SFML.Types
 import Control.Monad.SFML.Conversions
-
-{- $THConversion
-
-Almost the totality of this package is generated via Template Haskell.
-
--}
-
---------------------------------------------------------------------------------
-drawRectangleOfSize :: Vec2f -> SFML G.RectangleShape
-drawRectangleOfSize size = SFML $ do
-  shp <- liftIO . G.err $ G.createRectangleShape
-  liftIO $ G.setSize shp size
-  modify $ \s -> G.destroy shp : s
-  return shp

@@ -1,6 +1,8 @@
 module Main where
 
 import Control.Monad.SFML
+import Control.Monad.SFML.Graphics
+import Control.Monad.SFML.Audio hiding (setPosition)
 import qualified SFML.Graphics as G
 import qualified SFML.Window as W
 import SFML.Graphics.Color

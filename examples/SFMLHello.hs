@@ -1,6 +1,7 @@
 module Main where
 
 import Control.Monad.SFML
+import Control.Monad.SFML.Graphics
 import qualified SFML.Graphics as G
 import qualified SFML.Window as W
 
