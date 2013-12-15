@@ -1,5 +1,5 @@
 name:                SFML-control
-version:             0.2.0.1
+version:             0.2.0.2
 synopsis:            Higher level library on top of SFML
 license:             MIT
 license-file:        LICENSE
@@ -14,6 +14,10 @@ cabal-version:       >=1.10
 library
   exposed-modules:
       Control.Monad.SFML
+      Control.Monad.SFML.Audio
+      Control.Monad.SFML.Graphics
+      Control.Monad.SFML.Window
+      Control.Monad.SFML.System
       Control.Monad.SFML.Types
   other-modules:
       Control.Monad.SFML.Types.TH
